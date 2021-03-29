@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <link rel="stylesheet" href="styleBDD.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Base de données</title>
+</head>
+<body>
+    <h1>Liste des médecins</h1><hr>
+
+    <table>
+            <tr><th>Numéro</th><th>Nom</th><th>Prénom</th><th>Spécialité</th><th>Service</th><th>Modifier</th><th>Supprimer</th></tr>
+
+    <?php $id = mysqli_connect("127.0.0.1","root","","hopital"); //serveur adresse, user, mdp, quelle bdd 
+    
+    $req = "select * from medecins order by nom";
+
+    $res = mysqli_query($id, $req);
+
+    // echo $res; <-- fonctionne pas; 
+
+    $ligne = mysqli_fetch_assoc($res); //recup la premiere ligne et position le pointeur sur la deuxieme
+
+    $i = 0; 
+    while ( $ligne = mysqli_fetch_assoc($res))
+    {
+        if ($i%2==0) {echo "<tr class=\"test\">";} else {echo "<tr>";} ?>
+            <td><?=$ligne["numed"];?> </td>
+            <td><?=$ligne["nom"];?> </td>
+            <td><?=$ligne["prenom"];?> </td>
+            <td><?=$ligne["specialite"];?> </td>
+            <td><?=$ligne["service"];?> </td>
+            <td><a href="modifier.php?numed=<?=$ligne["numed"];?>"> <img src=images\crayon.png width="25" alt="modif"> </a></td>
+            <td><a href="supprimer.php?numed=<?=$ligne["numed"];?>"> <img src=images\croix.png width="25" alt="supp"></a></td>
+        </tr>
+    <?php
+    $i++;    
+    }
+    ?>
+    </table>
+</body>
+</html>
