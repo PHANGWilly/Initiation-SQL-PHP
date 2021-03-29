@@ -1,0 +1,27 @@
+<?php 
+    $id = mysqli_connect("127.0.0.1","root","","hopital");
+    $req = "select * medecins from  order by nom";
+    $res = mysqli_query($id, $req);
+    $numed = $_GET["numed"];
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supprimer</title>
+</head>
+<body>
+    <h1>A supprimer<h1><hr><br>
+
+<?php
+    //$del = "delete from medecins where numed=$numed"; 
+    //$res = mysqli_query($id, $del); 
+    echo "Vous avez supprimer le Docteur ayant le numéro : $numed <br><br>";
+    echo "Vous allez être rediriger vers le tableau";
+    header ("Refresh:7; url=listeMedecinsMardi.php");
+?>
+<br><br><hr>
+</body>
+</html>
