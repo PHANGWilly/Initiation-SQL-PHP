@@ -1,0 +1,72 @@
+<?php
+$id = mysqli_connect("127.0.0.1","root","","hopital");//"127.0.0.1:3307"  pour MariaDB
+
+if(isset($_POST["ok"]))
+{
+    $nom = $_POST["nom"];
+    $numed = $_POST["numed"];
+    $prenom = $_POST["prenom"];
+    $specialite = $_POST["specialite"];
+    $service = $_POST["service"];
+    $req = "update medecins set nom='$nom', 
+                                prenom='$prenom', 
+                                specialite ='$specialite', 
+                                service ='$service'
+            where numed=$numed"; 
+    mysqli_query($id, $req);
+    echo "Mise à jour du médecin ayant le numéro $numed réussie !";
+    header ("Refresh:3;url=listeMedecinsMardi.php");
+}
+if(isset($_GET["numed"]))
+{
+    $numed = $_GET["numed"];
+    $req = "select * from medecins where numed = $numed";
+    $res = mysqli_query($id, $req);
+    $ligne = mysqli_fetch_assoc($res);
+    $nom = $ligne["nom"];
+    $prenom = $ligne["prenom"];
+    $specialite = $ligne["specialite"];
+    $service = $ligne["service"];
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Mise à jour des informations du medecins numéro : <?=$numed;?></h1>
+
+    <form action="" method="post">
+    Nom : <input type="text" name="nom" value="<?=$nom;?>"> <br><br>
+    Prénom : <input type="text" name="prenom" value="<?=$prenom;?>"> <br><br>
+
+    Specialité : 
+    <select name="specialite">
+        <?php
+            $req2 ="select distinct specialite from medecins order by specialite";
+            $res2 = mysqli_query($id, $req2);
+            while($ligne2 = mysqli_fetch_assoc($res2))
+            {?>
+                <option value="<?=$ligne2["specialite"];?>" 
+                    <?php if($ligne2["specialite"]==$specialite) echo " selected "; ?>
+                
+                ><?=$ligne2["specialite"];?></option>
+
+           <?php 
+           }
+        ?>
+    </select><br><br>
+
+    Service : <input type="text" name="service" value="<?=$service;?>"> <br><br>
+    <input type="hidden" name="numed" value="<?=$numed;?>">
+    <input type="submit" value="Enregistrer" name="ok">
+    
+    </form>
+
+
+</body>
+</html>
